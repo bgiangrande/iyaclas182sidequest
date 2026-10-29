@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Side Quest — if only finding a job was this easy</title>
+<meta name="description" content="Side Quest: swipe right on jobs and quick paid tasks.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Instrument+Serif:ital@0;1&amp;display=swap">
+<style>
+body{margin:0;background:#F2EFE9}
+a{color:#17171B}a:hover{color:#1F7A55}
+
+/* Liquid glass */
+.lg{background:linear-gradient(135deg,rgba(255,255,255,.66),rgba(255,255,255,.28));backdrop-filter:blur(22px) saturate(185%);-webkit-backdrop-filter:blur(22px) saturate(185%);border:1px solid rgba(255,255,255,.75);box-shadow:inset 0 1px 1px rgba(255,255,255,.95),inset 0 -1px 1px rgba(255,255,255,.35),inset 0 0 22px rgba(255,255,255,.38),0 10px 30px rgba(23,23,27,.10)}
+.lg-dark{color:#F5F3EC;background:linear-gradient(135deg,rgba(255,255,255,.20),rgba(255,255,255,.06));backdrop-filter:blur(22px) saturate(175%);-webkit-backdrop-filter:blur(22px) saturate(175%);border:1px solid rgba(255,255,255,.30);box-shadow:inset 0 1px 1px rgba(255,255,255,.50),inset 0 -1px 1px rgba(255,255,255,.10),inset 0 0 22px rgba(255,255,255,.10),0 10px 30px rgba(0,0,0,.22)}
+.lg-ink{color:#FFFFFF;background:linear-gradient(135deg,rgba(23,23,27,.88),rgba(23,23,27,.74));backdrop-filter:blur(22px) saturate(170%);-webkit-backdrop-filter:blur(22px) saturate(170%);border:1px solid rgba(255,255,255,.22);box-shadow:inset 0 1px 1px rgba(255,255,255,.30),inset 0 0 22px rgba(255,255,255,.06),0 14px 34px rgba(23,23,27,.22)}
+.lg-green{color:#FFFFFF;background:linear-gradient(135deg,rgba(24,104,71,.94),rgba(24,104,71,.80));backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);border:1px solid rgba(255,255,255,.38);box-shadow:inset 0 1px 1px rgba(255,255,255,.55),inset 0 0 18px rgba(255,255,255,.14),0 10px 26px rgba(24,104,71,.28)}
+.lgb{cursor:pointer;text-decoration:none;transition:transform .2s ease,filter .2s ease,box-shadow .2s ease}
+.lgb:hover{transform:translateY(-1px);filter:brightness(1.06)}
+.lgb:active{transform:scale(.96)}
+.lgb:focus-visible,.sw-tab:focus-visible{outline:3px solid #2F64D6;outline-offset:2px}
+.lg-dark.lgb:focus-visible{outline-color:#F5F3EC}
+a.lg-green,a.lg-green:hover,a.lg-ink,a.lg-ink:hover{color:#FFFFFF}
+a.lg,a.lg:hover{color:#17171B}
+a.lg-dark,a.lg-dark:hover{color:#F5F3EC}
+
+.orb{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;opacity:.16 !important}
+.sw-card{touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab}
+.sw-card:active{cursor:grabbing}
+.sw-dots{background-image:radial-gradient(rgba(23,23,27,.10) 1.2px,transparent 1.3px);background-size:14px 14px}
+.sw-dots-light{background-image:radial-gradient(rgba(245,243,236,.10) 1.2px,transparent 1.3px);background-size:16px 16px}
+.sw-hlink{position:relative;color:rgba(245,243,236,.88);text-decoration:none;transition:color .3s}
+.sw-hlink::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .4s cubic-bezier(.2,.7,.2,1)}
+.sw-hlink:hover{color:#F5F3EC}.sw-hlink:hover::after{transform:scaleX(1)}
+.sw-hlink:focus-visible{outline:2px solid #F5F3EC;outline-offset:3px}
+.sw-rise{animation:sw-rise 1s cubic-bezier(.2,.7,.2,1) both}
+@keyframes sw-rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media (max-width:720px){.sw-hide-sm{display:none !important}}
+@media (max-width:1000px){.sw-demo{flex-direction:column;align-items:center !important}.sw-demo-phone{order:-1}.sw-demo-side{padding-top:0 !important;width:100%;max-width:560px;flex:none !important}}
+@media (prefers-reduced-motion:reduce){.sw-rise{animation:none}.lgb{transition:none}}
+.sw-marquee{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.sw-track{display:flex;align-items:center;width:max-content;animation:sw-marquee 38s linear infinite}
+.sw-marquee:hover .sw-track{animation-play-state:paused}
+.sw-logo{flex:0 0 auto;height:80px;padding:0 clamp(32px,4.5vw,64px);display:flex;align-items:center}
+.sw-logo img{filter:grayscale(1);opacity:.55;transition:filter .4s ease,opacity .4s ease}
+.sw-logo:hover img{filter:none;opacity:1}
+@keyframes sw-marquee{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.sw-track{animation:none}}
+.sk-card{position:relative;width:min(440px,100%);height:480px;margin:28px 0;display:flex;align-items:center}
+.sk-pan{position:absolute;top:0;left:70px;width:50%;height:100%;border-radius:40px;transform:skewX(15deg);filter:blur(18px) saturate(1.05);opacity:.55;-webkit-mask-image:radial-gradient(ellipse 62% 58% at 50% 50%,#000 45%,transparent 100%);mask-image:radial-gradient(ellipse 62% 58% at 50% 50%,#000 45%,transparent 100%);transition:all .5s cubic-bezier(.2,.7,.2,1)}
+.sk-blur{filter:blur(56px) saturate(1.1);opacity:.45}
+.sk-g-jobs{background:linear-gradient(160deg,#6EF0B0 0%,#16C784 28%,#2D7BFF 64%,#4A2BE0 100%)}
+.sk-g-tasks{background:linear-gradient(160deg,#FFD43B 0%,#FF8A1F 30%,#FF3D7F 64%,#B5179E 100%)}
+.sk-g-jobs~.sk-blobs .b1{background:radial-gradient(circle at 40% 40%,rgba(110,240,176,1),rgba(22,199,132,.7) 40%,rgba(45,123,255,0) 72%)}
+.sk-g-jobs~.sk-blobs .b2{background:radial-gradient(circle at 55% 55%,rgba(45,123,255,1),rgba(74,43,224,.7) 40%,rgba(74,43,224,0) 72%)}
+.sk-g-tasks~.sk-blobs .b1{background:radial-gradient(circle at 40% 40%,rgba(255,212,59,1),rgba(255,138,31,.7) 40%,rgba(255,138,31,0) 72%)}
+.sk-g-tasks~.sk-blobs .b2{background:radial-gradient(circle at 55% 55%,rgba(255,61,127,1),rgba(181,23,158,.7) 40%,rgba(181,23,158,0) 72%)}
+.sk-card:hover .sk-pan,.sk-card:focus-within .sk-pan{transform:skewX(0);left:24px;width:calc(100% - 100px)}
+.sk-blobs{position:absolute;inset:0;z-index:10;pointer-events:none}
+.sk-blobs span{position:absolute;width:0;height:0;opacity:0;border-radius:50%;filter:blur(18px);transition:all .5s ease;animation:sk-bob 2s ease-in-out infinite}
+.sk-blobs .b1{top:0;left:0;transition-duration:.15s}
+.sk-blobs .b2{bottom:0;right:0;animation-delay:-1s}
+.sk-card:hover .b1,.sk-card:focus-within .b1{top:-60px;left:40px;width:140px;height:140px;opacity:.55}
+.sk-card:hover .b2,.sk-card:focus-within .b2{bottom:-60px;right:40px;width:140px;height:140px;opacity:.55}
+@keyframes sk-bob{0%,100%{transform:translateY(10px)}50%{transform:translate(-10px)}}
+.sk-content{position:relative;z-index:20;left:0;width:100%;box-sizing:border-box;padding:30px 34px;border-radius:22px;display:flex;flex-direction:column;gap:16px;color:#17171B;background:linear-gradient(135deg,rgba(255,255,255,.84),rgba(255,255,255,.64));backdrop-filter:blur(14px) saturate(170%);-webkit-backdrop-filter:blur(14px) saturate(170%);border:1px solid rgba(255,255,255,.8);box-shadow:inset 0 1px 1px rgba(255,255,255,.95),0 18px 40px rgba(23,23,27,.14);transition:all .5s cubic-bezier(.2,.7,.2,1)}
+.sk-card:hover .sk-content,.sk-card:focus-within .sk-content{left:-25px;padding:46px 34px}
+@media (max-width:560px){.sk-card:hover .sk-content,.sk-card:focus-within .sk-content{left:-10px}}
+@media (prefers-reduced-motion:reduce){.sk-pan,.sk-content,.sk-blobs span{transition:none;animation:none}}
+.kwf{position:relative;isolation:isolate;overflow:hidden;container-type:inline-size;color:#173D2B;background:transparent;font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;text-transform:uppercase;border-radius:0}.kwf a{color:inherit;text-decoration:none}.kwf button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer}.kwf p,.kwf ul,.kwf h2,.kwf h3{margin:0;padding:0}.kwf ul{list-style:none}.kwf-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}.kwf-tile{position:absolute;inset:0;width:100%;height:100%;z-index:-1;display:block;pointer-events:none}.kwf-in-wrap{position:relative;padding:4cqw 0 0}.kwf-top{display:flex;justify-content:space-between;align-items:flex-start;gap:2cqw;min-height:24cqw}.kwf-motto{font-size:clamp(20px,3.15cqw,52px);line-height:.94;font-weight:500;letter-spacing:-.012em}.kwf-motto span{display:block}.kwf-key{position:relative;flex:none;width:clamp(28px,3.15cqw,46px);height:clamp(54px,6.3cqw,92px);border-radius:clamp(6px,.8cqw,12px);background:#F2EFE9 !important;color:#12241C !important;overflow:hidden;display:grid;place-items:center;transition:transform .35s cubic-bezier(.2,.8,.2,1),border-radius .35s,opacity .8s ease}.kwf-key:hover{transform:translateY(-3px);border-radius:999px}.kwf-key:active{transform:translateY(1px) scale(.96)}.kwf-key svg{width:62%;height:auto;display:block;overflow:visible}.kwf-key:hover svg,.kwf-key:focus-visible svg{animation:kwf-shoot .7s cubic-bezier(.6,0,.2,1)}.kwf-key:focus-visible,.kwf-link:focus-visible{outline:2px solid #F2EFE9;outline-offset:3px}@keyframes kwf-shoot{0%{transform:none}45%{transform:translateY(-160%)}46%{transform:translateY(160%)}100%{transform:none}}.kwf-row{display:grid;grid-template-columns:29.8fr 50.2fr 18fr;gap:1.2cqw;font-size:clamp(10px,1.32cqw,16px);line-height:1.17;letter-spacing:-.005em}.kwf-col h3{font-size:inherit;font-weight:700;margin-bottom:1.55em}.kwf-cols{display:flex;gap:.55em 1.1em;flex-wrap:wrap}.kwf-cols ul{display:flex;flex-direction:column}.kwf-addr p{white-space:pre}.kwf-link{position:relative;display:inline-block;padding:0 .14em;margin:0 -.14em;transition:color .25s}.kwf-link::before{content:'';position:absolute;inset:-.06em 0;background:#F2EFE9;transform:scaleX(0);transform-origin:right;transition:transform .35s cubic-bezier(.7,0,.2,1);z-index:-1}.kwf a.kwf-link:hover,.kwf a.kwf-link:focus-visible{color:#1F6B4C}.kwf-link:hover::before,.kwf-link:focus-visible::before{transform:scaleX(1);transform-origin:left}.kwf-word{display:block;width:106%;margin-left:-3%;margin-bottom:-3cqw;height:auto;margin-top:0;overflow:hidden;touch-action:pan-y;cursor:default}.kwf-l{transform:translateY(118%);transform-box:fill-box;transition-property:transform;transition-duration:1s;transition-timing-function:cubic-bezier(.16,.9,.18,1)}.kwf-l path{transform-box:fill-box;transform-origin:50% 100%;cursor:pointer}.kwf-shown .kwf-l{transform:none}.kwf-fade{opacity:0;transform:translateY(10px);transition-property:opacity,transform;transition-duration:.8s;transition-timing-function:cubic-bezier(.2,.8,.2,1)}.kwf-shown .kwf-fade{opacity:1;transform:none}.kwf-bar{margin-top:1.45cqw;border:1px solid #F2EFE9;border-radius:clamp(8px,1.05cqw,16px);padding:.35cqw 1.15cqw;display:flex;align-items:center;gap:1.5cqw;font-size:clamp(9px,1.02cqw,13px)}.kwf-copy{font-size:clamp(14px,1.95cqw,28px);letter-spacing:-.01em;white-space:nowrap}.kwf-reg{flex:1;min-width:0}.kwf-legal{display:flex;gap:.35em;white-space:nowrap}@container (max-width: 720px){.kwf-in-wrap{padding:16px}.kwf-top{min-height:44cqw}.kwf-motto{font-size:clamp(22px,7cqw,40px)}.kwf-row{grid-template-columns:1fr 1fr;gap:28px 16px;font-size:12px}.kwf-nav{grid-column:1 / -1;grid-row:2}.kwf-col h3{margin-bottom:.9em}.kwf-cols{gap:.4em 1.4em}.kwf-word{margin-top:0}.kwf-bar{flex-wrap:wrap;gap:4px 14px;padding:10px 14px;margin-top:12px;font-size:10px}.kwf-reg{flex-basis:100%;order:3}}@media (prefers-reduced-motion: reduce){.kwf-l,.kwf-fade{transform:none;opacity:1;transition:none}.kwf-key,.kwf-link,.kwf-link::before{transition:none}.kwf-key:hover svg,.kwf-key:focus-visible svg{animation:none}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="module">
+import { h, render, Component } from './preact.module.js';
+import htm from './htm.module.js';
+const html = htm.bind(h);
+
+// Looping hero clip (no audio). Set to the uploaded video's URL.
+const SW_VIDEO = 'hero-loop.mp4';
+
+// Logo marquee (rendered twice for a seamless loop).
+const SW_LOGOS = [
+  { src: 'logo-apple.png', alt: 'Apple', h: 38 },
+  { src: 'logo-anthropic.png', alt: 'Anthropic', h: 30 },
+  { src: 'logo-google.png', alt: 'Google', h: 34 },
+  { src: 'logo-nvidia.png', alt: 'NVIDIA', h: 44 },
+  { src: 'logo-jpmorganchase.png', alt: 'JPMorganChase', h: 24 },
+  { src: 'logo-neon.png', alt: 'Neon', h: 30 }
+];
+
+// ---- Wordmark engine (ported from the kiln wordmark footer) ----
+const KW_XH = 100, KW_ASC = 36, KW_DESC = 36, KW_SQ = 2.4, KW_TAU = Math.PI * 2;
+const kwClamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
+const kwArea = (p) => { let a = 0; for (let i = 0; i < p.length; i++) { const j = (i + 1) % p.length; a += p[i][0] * p[j][1] - p[j][0] * p[i][1]; } return a / 2; };
+const kwOrient = (p, sign) => (kwArea(p) * sign >= 0 ? p : p.slice().reverse());
+const kwSe = (cx, cy, rx, ry, t) => { const c = Math.cos(t), s = Math.sin(t); return [cx + rx * Math.sign(c) * Math.pow(Math.abs(c), 2 / KW_SQ), cy + ry * Math.sign(s) * Math.pow(Math.abs(s), 2 / KW_SQ)]; };
+const kwRing = (x0, y0, x1, y1, V, h) => {
+  const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, rx = (x1 - x0) / 2, ry = (y1 - y0) / 2;
+  const irx = Math.max(1, rx - V), iry = Math.max(1, ry - h); const o = [], n = [];
+  for (let i = 0; i < 96; i++) { const t = (i / 96) * KW_TAU; o.push(kwSe(cx, cy, rx, ry, t)); n.push(kwSe(cx, cy, irx, iry, t)); }
+  return [kwOrient(o, 1), kwOrient(n, -1)];
+};
+const kwClip = (poly, half) => {
+  const axis = half[0], at = half[1], side = half[2]; const out = []; const inside = (p) => (p[axis] - at) * side <= 0;
+  for (let i = 0; i < poly.length; i++) { const a = poly[i], b = poly[(i + 1) % poly.length]; const ia = inside(a), ib = inside(b);
+    if (ia) out.push(a); if (ia !== ib) { const u = (at - a[axis]) / (b[axis] - a[axis]); out.push([a[0] + (b[0] - a[0]) * u, a[1] + (b[1] - a[1]) * u]); } }
+  return out;
+};
+const kwKeep = (shape, ...halves) => shape.map((poly) => halves.reduce(kwClip, poly)).filter((poly) => poly.length >= 3 && Math.abs(kwArea(poly)) > 1e-6);
+const kwRect = (x0, y0, x1, y1) => kwOrient([[x0, y0], [x1, y0], [x1, y1], [x0, y1]], 1);
+const KW_B = 112;
+const KW_GLYPHS = {
+  d: [KW_B, (V, h) => [...kwRing(0, 0, KW_B, KW_XH, V, h), kwRect(KW_B - V, -KW_ASC, KW_B, KW_XH)]],
+  e: [KW_B, (V, h) => { const o = kwRing(0, 0, KW_B, KW_XH, V, h); return [...kwKeep(o, [1, KW_XH / 2, 1]), ...kwKeep(o, [1, KW_XH / 2, -1], [0, 82, 1]), kwRect(V * 0.5, KW_XH / 2 - h / 2, KW_B, KW_XH / 2 + h / 2)]; }],
+  i: [30, (V) => [kwRect(15 - V / 2, 0, 15 + V / 2, KW_XH)]],
+  q: [KW_B, (V, h) => [...kwRing(0, 0, KW_B, KW_XH, V, h), kwRect(KW_B - V, 0, KW_B, KW_XH + KW_DESC)]],
+  s: [104, (V, h) => { const m = KW_XH / 2; const up = kwRing(0, 0, 104, m + h / 2, V, h); const lo = kwRing(0, m - h / 2, 104, KW_XH, V, h);
+    return [...kwKeep(up, [0, 52, 1]), ...kwKeep(up, [0, 52, -1], [0, 90, 1], [1, (m + h / 2) / 2, 1]), ...kwKeep(lo, [0, 52, -1]), ...kwKeep(lo, [0, 52, 1], [0, 14, -1], [1, (m - h / 2 + KW_XH) / 2, -1])]; }],
+  t: [80, (V, h) => [kwRect(12, -KW_ASC * 0.8, 12 + V, 56), kwRect(0, 0, 76, h), ...kwKeep(kwRing(12, 12, 112, KW_XH, V, h), [1, 56, -1], [0, 80, 1])]],
+  u: [KW_B, (V, h) => [...kwKeep(kwRing(0, 0, KW_B, KW_XH, V, h), [1, KW_XH / 2, -1]), kwRect(0, 0, V, KW_XH / 2), kwRect(KW_B - V, 0, KW_B, KW_XH)]]
+};
+const kwStrokes = (k) => { const w = kwClamp(Number.isFinite(k) ? k : 1, 0.4, 1.6); return { V: 30 * w, h: 19 * (0.55 + 0.45 * w) }; };
+const kwN = (v) => String(Math.round(v * 10) / 10);
+const kwPath = (ch, k, dx) => { const g = KW_GLYPHS[ch]; if (!g) return ''; const st = kwStrokes(k);
+  return g[1](st.V, st.h).map((poly) => 'M' + poly.map((p) => kwN(p[0] + dx) + ' ' + kwN(p[1])).join('L') + 'Z').join(''); };
+const KW_WORD = 'sidequest';
+const KW_LAY = (() => { const letters = []; let x = 0; for (const ch of KW_WORD) { const g = KW_GLYPHS[ch]; if (!g) continue; letters.push({ ch: ch, x: x, w: g[0] }); x += g[0] + 10; }
+  return { letters: letters, width: x - 10, top: -KW_ASC, bottom: KW_XH + KW_DESC }; })();
+const KW_CENTRES = KW_LAY.letters.map((l) => l.x + l.w / 2);
+const KW_BASE = 1, KW_BOOST = 0.42;
+const kwLens = (px) => KW_CENTRES.map((c) => { if (px === null) return KW_BASE; const d = (c - px) / 150; return KW_BASE + KW_BOOST * Math.exp(-d * d); });
+const kwApproach = (from, to, k, dt) => to + (from - to) * Math.pow(1 - kwClamp(k, 0, 1), kwClamp(dt, 0, 0.1) * 60);
+const KW_TILES = [
+  { cx: 0.385, cy: 0.5, r: 0.415, sx: 0.755, sw: 0.245 },
+  { cx: 0.615, cy: 0.5, r: 0.415, sx: 0, sw: 0.245 },
+  { cx: 0.5, cy: 1.04, r: 0.5, sx: 0.5, sw: 0 },
+  { cx: 1, cy: 0, r: 0.6, sx: 0, sw: 0.3 }
+];
+
+const SW_FEED = {
+  job: [
+    { id: 'j1', company: 'Anthropic', mono: 'A', title: 'Product Strategy Intern', loc: 'San Francisco, CA', type: 'Summer internship', mode: 'On-site', badge: 'Great fit', blurb: 'Help shape how people use AI products: run user research, size opportunities and turn insights into clear product specs.', tags: ['Product', 'Research', 'AI'], bg: '#E7E3DC', fg: '#3A3A3A', img: 'anthropic.jpg', pos: '62% 62%', alt: 'Anthropic sign on an office building' },
+    { id: 'j2', company: 'Nubank', mono: 'Nu', title: 'Product Design Intern', loc: 'São Paulo, Brazil', type: 'Summer internship', mode: 'Hybrid', badge: 'New this week', blurb: 'Design simple, friendly banking flows for customers across Latin America, with weekly crits from senior designers.', tags: ['Product design', 'Figma', 'Fintech'], bg: '#EDE3F7', fg: '#6B2FA0', img: 'nubank.jpg', pos: '70% 72%', alt: 'Nubank office lobby with a large purple nu sculpture' },
+    { id: 'j3', company: 'J.P. Morgan', mono: 'JPM', title: 'Investment Banking Summer Analyst', loc: 'New York, NY', type: 'Summer internship', mode: 'On-site', badge: 'Apps open', blurb: 'Work on live deals alongside bankers: build models, prep pitch materials and learn how capital markets move.', tags: ['Finance', 'Excel', 'Modeling'], bg: '#DCE7F7', fg: '#2F4E8C', img: 'jpmorgan.jpg', pos: '45% 52%', alt: 'J.P. Morgan logo on a glass office building' },
+    { id: 'j4', company: 'NVIDIA', mono: 'NV', title: 'Software Engineering Intern, GPU Systems', loc: 'Santa Clara, CA', type: 'Fall internship', mode: 'On-site', badge: 'Top pick', blurb: 'Write and profile code that runs on GPUs, from drivers to AI frameworks, with mentorship from senior engineers.', tags: ['C++', 'CUDA', 'Systems'], bg: '#E6F2D6', fg: '#4A7A00', img: 'nvidia.jpg', pos: '52% 38%', alt: 'NVIDIA logo on the side of an office building' },
+    { id: 'j5', company: 'Google', mono: 'G', title: 'Associate Product Manager', loc: 'Mountain View, CA', type: 'Full-time', mode: 'Hybrid', badge: 'New grad', blurb: 'Own a product area end to end: talk to users, write specs and work with engineering to ship features at scale.', tags: ['Product', 'Strategy', 'New grad'], bg: '#DCE7F7', fg: '#2F64D6', img: 'google.jpg', pos: '56% 32%', alt: 'Google logo on a glass office building' },
+    { id: 'j6', company: 'Apple', mono: 'A', title: 'Creative, Apple Fifth Avenue', loc: 'New York, NY', type: 'Part-time', mode: 'In store', badge: 'Flexible hours', blurb: 'Lead hands-on sessions that help customers get creative with photo, video and music on their devices.', tags: ['Teaching', 'Creativity', 'Retail'], bg: '#ECECEC', fg: '#1D1D1F', img: 'apple.jpg', pos: '50% 76%', alt: 'Apple Fifth Avenue glass cube store at dusk' }
+  ],
+  task: [
+    { id: 't1', company: 'Maple & Rye Bakery', mono: 'MR', title: 'Redesign our menu board', loc: 'Remote', type: '$150 fixed', mode: 'Due in 3 days', badge: 'Paid on delivery', blurb: 'We need a clean, readable menu for two TV screens behind the counter. Our logo and price list are ready to go.', tags: ['Design', 'Canva or Figma'], bg: '#F6E4D3', fg: '#9A4F1E' },
+    { id: 't2', company: 'Prof. R. Alvarez', mono: 'RA', title: 'Transcribe 4 interview recordings', loc: 'Remote', type: '$80 fixed', mode: '~4 hours', badge: 'Quick turnaround', blurb: 'Clean verbatim transcripts of four 25-minute research interviews. Template provided.', tags: ['Writing', 'Research'], bg: '#DCE7F7', fg: '#2F4E8C' },
+    { id: 't3', company: 'Westside Robotics Club', mono: 'WR', title: 'Calculus tutor, 2 sessions', loc: 'Los Angeles, CA', type: '$35 / hour', mode: 'This weekend', badge: 'In person', blurb: 'Help three high-schoolers prep for their AP Calc exam. Library room is booked Saturday and Sunday.', tags: ['Tutoring', 'Math'], bg: '#DDF0E2', fg: '#2B6B47' },
+    { id: 't4', company: 'Ember Events', mono: 'EE', title: 'Check-in staff for a tech meetup', loc: 'Santa Monica, CA', type: '$120 flat', mode: 'Thu, 5–9 pm', badge: 'Pizza included', blurb: 'Greet guests, scan tickets and point people to the right room. Friendly and on time is all we ask.', tags: ['Events', 'Hospitality'], bg: '#F7EBC4', fg: '#7A5A00' },
+    { id: 't5', company: 'Stackwise', mono: 'Sw', title: 'Test our app & write feedback', loc: 'Remote', type: '$60 fixed', mode: '~2 hours', badge: 'Beginner friendly', blurb: 'Try our budgeting app for a week of tasks and record what confused you. No coding needed.', tags: ['UX testing', 'Writing'], bg: '#E8E1F5', fg: '#5B3F98' }
+  ]
+};
+
+class SideQuest extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { tab: 'job', idx: { job: 0, task: 0 }, dx: 0, dy: 0, dragging: false, leaving: null, view: 'discover', saved: [], email: '', joined: false, error: false, heroH: 820 };
+    this.start = null;
+    this.timer = null;
+    this.raf = 0;
+    this.phoneOuter = null; this.phoneInner = null; this.heroTitle = null;
+    this.onScroll = () => { if (!this.raf) this.raf = window.requestAnimationFrame(() => { this.raf = 0; this.updateScroll(); }); };
+    this.onResize = () => { this.measure(); this.onScroll(); };
+    // footer wordmark state (written straight to the DOM by the loop)
+    this.kw = { k: KW_LAY.letters.map(() => KW_BASE), kT: KW_LAY.letters.map(() => KW_BASE), tile: 0, cur: Object.assign({}, KW_TILES[0]), target: Object.assign({}, KW_TILES[0]), lean: [0, 0], size: { w: 960, h: 540 }, raf: 0, last: 0 };
+    this.kwPaths = [];
+    this.kwRoot = null; this.kwTile = null; this.kwDisc = null; this.kwSlab = null;
+    this.state.kwShown = false;
+  }
+  kwPaint() {
+    const a = this.kw, w = a.size.w, h = a.size.h;
+    if (this.kwTile) this.kwTile.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+    if (this.kwDisc) { this.kwDisc.setAttribute('cx', kwN(a.cur.cx * w)); this.kwDisc.setAttribute('cy', kwN(a.cur.cy * h)); this.kwDisc.setAttribute('rx', kwN(a.cur.r * w)); this.kwDisc.setAttribute('ry', kwN(a.cur.r * w)); }
+    if (this.kwSlab) { this.kwSlab.setAttribute('x', kwN(a.cur.sx * w)); this.kwSlab.setAttribute('width', kwN(Math.max(0, a.cur.sw * w))); this.kwSlab.setAttribute('height', String(h)); }
+    KW_LAY.letters.forEach((l, i) => { const p = this.kwPaths[i]; if (p) p.setAttribute('d', kwPath(l.ch, a.k[i], l.x)); });
+  }
+  kwKick() {
+    const a = this.kw; if (a.raf) return; a.last = 0;
+    const step = (now) => {
+      const dt = a.last ? (now - a.last) / 1000 : 1 / 60; a.last = now; const snap = this.reduced; let busy = false;
+      const goal = Object.assign({}, a.target, { cx: a.target.cx + 0.035 * kwClamp(a.lean[0], -1, 1), cy: a.target.cy + 0.056 * kwClamp(a.lean[1], -1, 1) });
+      ['cx', 'cy', 'r', 'sx', 'sw'].forEach((key) => { const nx = snap ? goal[key] : kwApproach(a.cur[key], goal[key], 0.075, dt); a.cur[key] = Math.abs(nx - goal[key]) < 1e-4 ? goal[key] : nx; if (a.cur[key] !== goal[key]) busy = true; });
+      for (let i = 0; i < a.k.length; i++) { const nx = snap ? a.kT[i] : kwApproach(a.k[i], a.kT[i], 0.16, dt); a.k[i] = Math.abs(nx - a.kT[i]) < 1e-3 ? a.kT[i] : nx; if (a.k[i] !== a.kT[i]) busy = true; }
+      this.kwPaint(); a.raf = busy ? window.requestAnimationFrame(step) : 0;
+    };
+    a.raf = window.requestAnimationFrame(step);
+  }
+  componentDidMount() {
+    this.reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    window.addEventListener('scroll', this.onScroll, { passive: true, capture: true });
+    window.addEventListener('resize', this.onResize);
+    this.measure();
+    this.updateScroll();
+    this.settle = setTimeout(() => this.updateScroll(), 60);
+    const root = this.kwRoot;
+    if (root) {
+      if (typeof ResizeObserver === 'function') {
+        this.kwRO = new ResizeObserver((entries) => { const r = entries[0].contentRect; this.kw.size = { w: Math.max(1, Math.round(r.width)), h: Math.max(1, Math.round(r.height)) }; this.kwPaint(); });
+        this.kwRO.observe(root);
+      }
+      if (typeof IntersectionObserver === 'function') {
+        this.kwIO = new IntersectionObserver((entries) => { if (entries.some((e) => e.isIntersecting)) { this.setState({ kwShown: true }); this.kwIO.disconnect(); } }, { threshold: 0.15 });
+        this.kwIO.observe(root);
+      } else this.setState({ kwShown: true });
+    }
+    this.kwPaint();
+  }
+  componentWillUnmount() {
+    if (this.timer) clearTimeout(this.timer);
+    if (this.settle) clearTimeout(this.settle);
+    if (this.raf) window.cancelAnimationFrame(this.raf);
+    window.removeEventListener('scroll', this.onScroll, { capture: true });
+    window.removeEventListener('resize', this.onResize);
+    if (this.kwRO) this.kwRO.disconnect();
+    if (this.kwIO) this.kwIO.disconnect();
+    if (this.kw.raf) window.cancelAnimationFrame(this.kw.raf);
+  }
+  componentDidUpdate() { this.updateScroll(); }
+  // Hero fills the viewport, so only the top of the phone peeks above the fold.
+  measure() {
+    const h = Math.round(Math.min(1000, Math.max(600, window.innerHeight || 820)));
+    if (h !== this.state.heroH) this.setState({ heroH: h });
+  }
+  // Scroll reveal: phone stays out of the hero, then rises in tilted back and straightens as it scrolls into view.
+  updateScroll() {
+    const outer = this.phoneOuter, inner = this.phoneInner;
+    if (!outer || !inner) return;
+    const vh = window.innerHeight || 820;
+    const top = outer.getBoundingClientRect().top;
+    let p = (vh - top) / (vh * 0.75);
+    p = Math.max(0, Math.min(1, p));
+    if (this.reduced) p = 1;
+    const e = 1 - Math.pow(1 - p, 2);
+    inner.style.transform = 'translateY(' + (80 * (1 - e)).toFixed(1) + 'px) rotateX(' + (24 * (1 - e)).toFixed(2) + 'deg) scale(' + (0.92 + 0.08 * e).toFixed(4) + ')';
+    if (this.heroTitle) this.heroTitle.style.transform = 'translateY(' + (-28 * e).toFixed(1) + 'px)';
+  }
+  feed() { return SW_FEED[this.state.tab]; }
+  current() { return this.feed()[this.state.idx[this.state.tab]]; }
+  decide(kind) {
+    const item = this.current();
+    if (!item || this.state.leaving) return;
+    const tab = this.state.tab;
+    this.setState({ leaving: kind, dragging: false });
+    this.timer = setTimeout(() => {
+      const idx = Object.assign({}, this.state.idx);
+      idx[tab] = idx[tab] + 1;
+      let saved = this.state.saved;
+      if (kind !== 'pass') saved = [Object.assign({}, item, { kind: kind, tab: tab })].concat(saved.filter((s) => s.id !== item.id));
+      this.setState({ idx: idx, saved: saved, leaving: null, dx: 0, dy: 0 });
+    }, 300);
+  }
+  renderVals() {
+    const s = this.state;
+    const feed = this.feed();
+    const i = s.idx[s.tab];
+    const top = feed[i] || null;
+    const next = feed[i + 1] || null;
+    const clamp = (v) => Math.max(0, Math.min(1, v));
+    const deco = (x) => x ? Object.assign({}, x, { hasImg: !!x.img, noImg: !x.img }) : {};
+    let topTransform = 'translate(' + s.dx + 'px,' + s.dy + 'px) rotate(' + (s.dx / 18) + 'deg)';
+    if (s.leaving === 'like') topTransform = 'translate(560px,-40px) rotate(26deg)';
+    if (s.leaving === 'pass') topTransform = 'translate(-560px,-40px) rotate(-26deg)';
+    if (s.leaving === 'star') topTransform = 'translate(0,-820px) rotate(-4deg)';
+    const progress = s.leaving ? 1 : clamp(Math.abs(s.dx) / 120);
+    const isJob = s.tab === 'job';
+    const on = { bg: 'rgba(255,255,255,.9)', fg: '#17171B', sh: 'inset 0 1px 1px rgba(255,255,255,1), 0 2px 10px rgba(23,23,27,.12)' };
+    const off = { bg: 'transparent', fg: '#45454D', sh: 'none' };
+    const jt = isJob ? on : off, tt = isJob ? off : on;
+    const tabSaved = s.saved.filter((x) => x.tab === s.tab);
+    const hasTop = !!top;
+    const disc = s.view === 'discover';
+    return {
+      heroH: s.heroH,
+      kwfClass: s.kwShown ? 'kwf kwf-shown' : 'kwf',
+      kwfRef: (el) => { this.kwRoot = el; },
+      kwfTileRef: (el) => { this.kwTile = el; },
+      kwfDiscRef: (el) => { this.kwDisc = el; },
+      kwfSlabRef: (el) => { this.kwSlab = el; },
+      kwViewBox: '0 ' + KW_LAY.top + ' ' + KW_LAY.width + ' ' + (KW_LAY.bottom - KW_LAY.top),
+      kwLetters: KW_LAY.letters.map((l, i) => ({
+        d: kwPath(l.ch, KW_BASE, l.x),
+        delay: (140 + i * 70) + 'ms',
+        ref: (el) => { this.kwPaths[i] = el; },
+        stamp: () => {
+          this.kw.k[i] = Math.min(1.6, this.kw.k[i] + 0.55); this.kwKick();
+          const p = this.kwPaths[i];
+          if (p && !this.reduced && typeof p.animate === 'function') p.animate([{ transform: 'none' }, { transform: 'scale(1.05, 0.8)', offset: 0.25 }, { transform: 'scale(0.98, 1.05)', offset: 0.6 }, { transform: 'none' }], { duration: 620, easing: 'cubic-bezier(.3,.7,.3,1)' });
+        }
+      })),
+      kwfMove: (e) => { if (e.pointerType === 'touch') return; const r = e.currentTarget.getBoundingClientRect(); this.kw.lean = [((e.clientX - r.left) / r.width) * 2 - 1, ((e.clientY - r.top) / r.height) * 2 - 1]; this.kwKick(); },
+      kwfLeave: () => { this.kw.lean = [0, 0]; this.kwKick(); },
+      kwfClick: (e) => {
+        if (e.target && e.target.closest && e.target.closest('a,button,.kwf-word')) return;
+        if (window.getSelection && String(window.getSelection())) return;
+        this.kw.tile = (this.kw.tile + 1) % KW_TILES.length; this.kw.target = Object.assign({}, KW_TILES[this.kw.tile]); this.kwKick();
+      },
+      kwfTop: () => { const sc = document.scrollingElement || document.documentElement; const beh = this.reduced ? 'auto' : 'smooth'; if (sc && sc.scrollTo) sc.scrollTo({ top: 0, behavior: beh }); window.scrollTo({ top: 0, behavior: beh }); },
+      kwWordMove: (e) => { const r = e.currentTarget.getBoundingClientRect(); const x = ((e.clientX - r.left) / r.width) * KW_LAY.width; this.kw.kT = kwLens(x); this.kwKick(); },
+      kwWordLeave: () => { this.kw.kT = kwLens(null); this.kwKick(); },
+      logos: SW_LOGOS.map((l) => Object.assign({}, l, { hidden: 'false' })).concat(SW_LOGOS.map((l) => Object.assign({}, l, { alt: '', hidden: 'true' }))),
+      phoneOuterRef: (el) => { this.phoneOuter = el; },
+      phoneInnerRef: (el) => { this.phoneInner = el; },
+      heroTitleRef: (el) => { this.heroTitle = el; },
+      videoSrc: SW_VIDEO, hasVideo: !!SW_VIDEO, noVideo: !SW_VIDEO,
+      videoRef: (el) => { if (el) { el.muted = true; el.loop = true; const p = el.play && el.play(); if (p && p.catch) p.catch(() => {}); } },
+      jobSelected: isJob ? 'true' : 'false', taskSelected: isJob ? 'false' : 'true',
+      jobBg: jt.bg, jobFg: jt.fg, jobShadow: jt.sh, taskBg: tt.bg, taskFg: tt.fg, taskShadow: tt.sh,
+      pickJob: () => this.setState({ tab: 'job', dx: 0, dy: 0 }),
+      pickTask: () => this.setState({ tab: 'task', dx: 0, dy: 0 }),
+      isDiscover: disc, isMatches: !disc,
+      goDiscover: () => this.setState({ view: 'discover' }),
+      goMatches: () => this.setState({ view: 'matches' }),
+      discoverColor: disc ? '#17171B' : '#5E5E66',
+      matchesColor: disc ? '#5E5E66' : '#17171B',
+      discoverBg: disc ? 'rgba(255,255,255,.85)' : 'transparent',
+      matchesBg: disc ? 'transparent' : 'rgba(255,255,255,.85)',
+      top: deco(top), next: deco(next), hasTop: hasTop, hasNext: !!next, isEmpty: !hasTop,
+      emptyText: isJob ? 'That’s every job in your area for now. Check your shortlist or start the feed over.' : 'No more side quests nearby right now. Check your shortlist or start the feed over.',
+      topTransform: topTransform,
+      topTransition: s.dragging ? 'none' : 'transform 300ms cubic-bezier(.2,.7,.3,1)',
+      nextTransform: 'scale(' + (0.93 + 0.07 * progress) + ') translateY(' + (14 - 14 * progress) + 'px)',
+      likeOp: s.leaving === 'like' ? 1 : (s.leaving ? 0 : clamp(s.dx / 100)),
+      passOp: s.leaving === 'pass' ? 1 : (s.leaving ? 0 : clamp(-s.dx / 100)),
+      starOp: s.leaving === 'star' ? 1 : 0,
+      likeWord: isJob ? 'APPLY' : 'CLAIM',
+      down: (e) => {
+        if (s.leaving) return;
+        this.start = { x: e.clientX, y: e.clientY };
+        try { e.currentTarget.setPointerCapture(e.pointerId); } catch (err) {}
+        this.setState({ dragging: true });
+      },
+      move: (e) => {
+        if (!this.start) return;
+        this.setState({ dx: e.clientX - this.start.x, dy: (e.clientY - this.start.y) * 0.35 });
+      },
+      up: () => {
+        if (!this.start) return;
+        this.start = null;
+        const dx = this.state.dx;
+        if (dx > 110) this.decide('like');
+        else if (dx < -110) this.decide('pass');
+        else this.setState({ dx: 0, dy: 0, dragging: false });
+      },
+      passBtn: () => this.decide('pass'),
+      likeBtn: () => this.decide('like'),
+      starBtn: () => this.decide('star'),
+      reset: () => { const idx = Object.assign({}, s.idx); idx[s.tab] = 0; this.setState({ idx: idx, dx: 0, dy: 0 }); },
+      tabName: isJob ? 'Jobs' : 'Tasks',
+      savedList: tabSaved.map((x) => Object.assign({}, deco(x), {
+        isStar: x.kind === 'star',
+        status: x.tab === 'job' ? (x.kind === 'star' ? 'Super-applied' : 'Applied') : (x.kind === 'star' ? 'Priority claim' : 'Claimed'),
+        remove: () => this.setState({ saved: this.state.saved.filter((y) => y.id !== x.id) })
+      })),
+      noSaved: tabSaved.length === 0,
+      savedLabel: tabSaved.length + (isJob ? ' jobs' : ' tasks'),
+      hasSaved: s.saved.length > 0, savedCount: s.saved.length,
+      email: s.email, joined: s.joined, notJoined: !s.joined, hasError: s.error,
+      onEmail: (e) => this.setState({ email: e.target.value, error: false }),
+      join: (e) => {
+        if (e && e.preventDefault) e.preventDefault();
+        const v = (this.state.email || '').trim();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) { this.setState({ error: true }); return; }
+        this.setState({ joined: true, email: v });
+      }
+    };
+  }
+}
+
+const tpl = (v) => html`<div style="font-family: Inter, system-ui, sans-serif; color: #17171B; background: #F2EFE9; min-height: 100vh">
+
+  
+  <section id="top" aria-label="Side Quest" style="position: relative; height: ${v.heroH}px; min-height: 600px; overflow: hidden; background: #0A0D08; color: #F5F3EC; display: flex; flex-direction: column">
+    ${v.hasVideo ? html`
+      <video ref=${v.videoRef} src=${v.videoSrc} autoPlay=${true} loop=${true} muted=${true} playsInline=${true} preload="auto" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 42% 50%"></video>
+    ` : null}
+    ${v.noVideo ? html`
+      <div class="sw-dots-light" aria-hidden="true" style="position: absolute; inset: 0; background-color: #1B211A; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 120px">
+        <span style="font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(245,243,236,.55)">[Looping video clip goes here]</span>
+      </div>
+    ` : null}
+    <div aria-hidden="true" style="position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(0,0,0,.40), rgba(0,0,0,.12) 45%, rgba(0,0,0,0) 70%), linear-gradient(180deg, rgba(0,0,0,.30), rgba(0,0,0,0) 30%)"></div>
+
+    <header class="sw-rise" style="position: relative; z-index: 3; padding: 22px clamp(16px, 3vw, 32px); display: flex; align-items: center; justify-content: space-between; gap: 16px">
+      <a href="#top" style="text-decoration: none; color: rgba(245,243,236,.85); font-weight: 600; font-size: 13px; letter-spacing: 0.38em; text-transform: uppercase">Side Quest</a>
+      <nav aria-label="Main" class="sw-hide-sm" style="display: flex; align-items: center; gap: 32px; font-size: 15px; font-weight: 500">
+        <a class="sw-hlink" href="#demo">Try it</a>
+        <a class="sw-hlink" href="#how">How it works</a>
+        <a class="sw-hlink" href="#employers">For employers</a>
+      </nav>
+      <a class="lg-dark lgb" href="#demo" style="display: inline-flex; align-items: center; height: 44px; padding: 0 20px; border-radius: 999px; font-size: 14px; font-weight: 600">Get early access</a>
+    </header>
+
+    <div style="position: relative; z-index: 2; flex: 1; display: flex; align-items: center; padding: 40px clamp(20px, 5vw, 72px) 120px">
+      <div ref=${v.heroTitleRef} style="will-change: transform">
+      <h1 class="sw-rise" style="animation-delay: .15s; margin: 0; max-width: 10ch; font-family: 'Instrument Serif', 'Times New Roman', serif; font-weight: 400; font-size: clamp(58px, 8.6vw, 136px); line-height: 0.92; letter-spacing: -0.02em; color: #F5F3EC; text-shadow: 0 2px 30px rgba(0,0,0,.32); text-wrap: balance">If only finding a job <em style="font-style: italic">felt like this.</em></h1>
+      </div>
+    </div>
+
+  </section>
+
+  
+  <section id="demo" style="position: relative; z-index: 2">
+    <div aria-hidden="true" style="position: absolute; inset: 0; overflow: hidden; pointer-events: none">
+      <div class="orb" style="width: 520px; height: 520px; background: #9BE7B8; opacity: .55; top: 80px; right: 4%"></div>
+      <div class="orb" style="width: 420px; height: 420px; background: #A9C4F5; opacity: .5; bottom: 20px; right: 30%"></div>
+      <div class="orb" style="width: 380px; height: 380px; background: #F6C9A8; opacity: .45; top: 160px; left: -80px"></div>
+    </div>
+
+    <div class="sw-demo" style="position: relative; z-index: 1; max-width: 1240px; margin: 0 auto; padding: 0 24px 120px; display: flex; align-items: flex-start; gap: 48px">
+      <div class="sw-demo-side" style="flex: 1 1 0; min-width: 0; padding-top: 150px; display: flex; flex-direction: column; gap: 24px">
+        <span class="lg" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; padding: 8px 15px; border-radius: 999px; font-size: 14px; font-weight: 500">
+          <span style="width: 8px; height: 8px; border-radius: 50%; background: #1F8A5B"></span>
+          Jobs and quick paid tasks, one swipe away
+        </span>
+        <h2 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(50px, 6.6vw, 96px); line-height: 0.95; letter-spacing: -0.02em">Swipe right on your <em>next job.</em></h2>
+        <p style="margin: 0; font-size: 18px; line-height: 1.65; color: #4A4A52; max-width: 480px">Side Quest turns the job hunt into a two-minute habit. Flip through roles that fit you, or pick up paid tasks between classes. Right to apply, left to pass, star to stand out.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 12px">
+          <a class="lg-ink lgb" href="#demo" style="display: inline-flex; align-items: center; height: 52px; padding: 0 26px; border-radius: 999px; font-weight: 500; font-size: 15px; letter-spacing: 0.01em">Get early access</a>
+          <a class="lg lgb" href="#how" style="display: inline-flex; align-items: center; height: 52px; padding: 0 24px; border-radius: 999px; font-weight: 500; font-size: 15px; letter-spacing: 0.01em">See how it works</a>
+        </div>
+      </div>
+
+      
+      <div ref=${v.phoneOuterRef} class="sw-demo-phone" style="flex: 0 0 372px; max-width: 100%; margin-top: 56px; perspective: 1200px; display: flex; flex-direction: column; align-items: center">
+        <div ref=${v.phoneInnerRef} style="width: 100%; max-width: 372px; height: 760px; background: #17171B; border-radius: 56px; padding: 11px; box-sizing: border-box; box-shadow: 0 40px 80px rgba(23,23,27,.28), 0 8px 20px rgba(23,23,27,.14); transform-origin: 50% 50%; will-change: transform">
+          <div style="width: 100%; height: 100%; background: #EFEDE8; border-radius: 46px; overflow: hidden; display: flex; flex-direction: column; position: relative">
+            <div class="orb" aria-hidden="true" style="width: 260px; height: 260px; background: #9BE7B8; opacity: .7; top: -40px; left: -60px; filter: blur(50px)"></div>
+            <div class="orb" aria-hidden="true" style="width: 240px; height: 240px; background: #A9C4F5; opacity: .7; bottom: 40px; right: -70px; filter: blur(50px)"></div>
+            <div class="orb" aria-hidden="true" style="width: 200px; height: 200px; background: #F6C9A8; opacity: .6; bottom: -40px; left: 20px; filter: blur(50px)"></div>
+
+            
+            <div style="position: relative; padding: 26px 20px 12px; display: flex; justify-content: center">
+              <div role="tablist" aria-label="Feed type" class="lg" style="display: flex; border-radius: 999px; padding: 4px; width: 224px">
+                <button class="sw-tab" role="tab" aria-selected=${v.jobSelected} onClick=${v.pickJob} style="flex: 1; border: 0; cursor: pointer; padding: 10px 0; border-radius: 999px; font: 600 15px Inter, sans-serif; background: ${v.jobBg}; color: ${v.jobFg}; box-shadow: ${v.jobShadow}; transition: background .25s ease">Jobs</button>
+                <button class="sw-tab" role="tab" aria-selected=${v.taskSelected} onClick=${v.pickTask} style="flex: 1; border: 0; cursor: pointer; padding: 10px 0; border-radius: 999px; font: 600 15px Inter, sans-serif; background: ${v.taskBg}; color: ${v.taskFg}; box-shadow: ${v.taskShadow}; transition: background .25s ease">Tasks</button>
+              </div>
+            </div>
+
+            
+            ${v.isDiscover ? html`
+              <div style="position: relative; flex: 1; display: flex; flex-direction: column; min-height: 0">
+                <div style="flex: 1; position: relative; margin: 4px 16px 0; min-height: 0">
+
+                  ${v.hasNext ? html`
+                    <div aria-hidden="true" style="position: absolute; inset: 0; background: #FFFFFF; border: 1px solid rgba(255,255,255,.9); border-radius: 26px; overflow: hidden; box-shadow: 0 6px 18px rgba(23,23,27,.08); transform: ${v.nextTransform}; transition: transform 280ms ease">
+                      <div class="sw-dots" style="height: 210px; background-color: ${v.next.bg}; display: flex; align-items: center; justify-content: center; position: relative">
+                        ${v.next.hasImg ? html`
+                          <img src=${v.next.img} alt="" draggable="false" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: ${v.next.pos}" />
+                        ` : null}
+                        ${v.next.noImg ? html`
+                          <span style="width: 84px; height: 84px; border-radius: 24px; background: ${v.next.fg}; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font: 400 40px 'Instrument Serif', Georgia, serif">${v.next.mono}</span>
+                        ` : null}
+                      </div>
+                      <div style="padding: 18px 20px">
+                        <div style="font: 400 28px 'Instrument Serif', Georgia, serif">${v.next.company}</div>
+                        <div style="font-size: 16px; color: #45454D; margin-top: 4px">${v.next.title}</div>
+                      </div>
+                    </div>
+                  ` : null}
+
+                  ${v.hasTop ? html`
+                    <div class="sw-card" onPointerDown=${v.down} onPointerMove=${v.move} onPointerUp=${v.up} onPointerCancel=${v.up} style="position: absolute; inset: 0; background: #FFFFFF; border: 1px solid rgba(255,255,255,.95); border-radius: 26px; overflow: hidden; box-shadow: inset 0 1px 1px rgba(255,255,255,1), 0 14px 34px rgba(23,23,27,.14); transform: ${v.topTransform}; transition: ${v.topTransition}">
+                      <div class="sw-dots" style="height: 210px; background-color: ${v.top.bg}; display: flex; align-items: center; justify-content: center; position: relative">
+                        ${v.top.hasImg ? html`
+                          <img src=${v.top.img} alt=${v.top.alt} draggable="false" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: ${v.top.pos}; pointer-events: none" />
+                        ` : null}
+                        ${v.top.noImg ? html`
+                          <span style="width: 84px; height: 84px; border-radius: 24px; background: ${v.top.fg}; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font: 400 40px 'Instrument Serif', Georgia, serif">${v.top.mono}</span>
+                        ` : null}
+                        <span class="lg" style="position: absolute; top: 14px; left: 14px; padding: 5px 11px; border-radius: 999px; font-size: 12px; font-weight: 600">${v.top.badge}</span>
+                        <span style="position: absolute; top: 26px; left: 18px; transform: rotate(-14deg); border: 3px solid #1F7A55; color: #1F7A55; padding: 4px 12px; border-radius: 10px; font: 400 31px 'Instrument Serif', Georgia, serif; background: rgba(255,255,255,.92); opacity: ${v.likeOp}">${v.likeWord}</span>
+                        <span style="position: absolute; top: 26px; right: 18px; transform: rotate(14deg); border: 3px solid #C2362F; color: #C2362F; padding: 4px 12px; border-radius: 10px; font: 400 31px 'Instrument Serif', Georgia, serif; background: rgba(255,255,255,.92); opacity: ${v.passOp}">PASS</span>
+                        <span style="position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); border: 3px solid #2F64D6; color: #2F64D6; padding: 4px 12px; border-radius: 10px; font: 400 28px 'Instrument Serif', Georgia, serif; background: rgba(255,255,255,.92); white-space: nowrap; opacity: ${v.starOp}">SUPER</span>
+                      </div>
+                      <div style="padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 12px">
+                        <div>
+                          <div style="font: 400 31px/1.1 'Instrument Serif', Georgia, serif; letter-spacing: -0.01em">${v.top.company}</div>
+                          <div style="font-size: 16px; color: #3E3E46; margin-top: 4px; font-weight: 500">${v.top.title}</div>
+                        </div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; color: #45454D">
+                          <span style="display: flex; align-items: center; gap: 5px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"></path><circle cx="12" cy="9.5" r="2.5"></circle></svg>${v.top.loc}</span>
+                          <span style="display: flex; align-items: center; gap: 5px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2"></rect><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"></path></svg>${v.top.type}</span>
+                          <span style="display: flex; align-items: center; gap: 5px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>${v.top.mode}</span>
+                        </div>
+                        <p style="margin: 0; font-size: 14.5px; line-height: 1.5; color: #3E3E46">${v.top.blurb}</p>
+                        <div style="display: flex; flex-wrap: wrap; gap: 6px">
+                          ${(v.top.tags || []).map((tag, $index) => html`
+                            <span style="background: #F1EEE8; padding: 5px 10px; border-radius: 999px; font-size: 12px; font-weight: 500">${tag}</span>
+                          `)}
+                        </div>
+                      </div>
+                    </div>
+                  ` : null}
+
+                  ${v.isEmpty ? html`
+                    <div class="lg" style="position: absolute; inset: 0; border-radius: 26px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 24px; text-align: center">
+                      <div style="font: 400 28px 'Instrument Serif', Georgia, serif">You're all <em>caught up</em></div>
+                      <p style="margin: 0; font-size: 15px; color: #45454D; line-height: 1.5">${v.emptyText}</p>
+                      <button class="lg-ink lgb" onClick=${v.reset} style="height: 46px; padding: 0 20px; border-radius: 999px; font: 600 15px Inter, sans-serif">Start over</button>
+                    </div>
+                  ` : null}
+                </div>
+
+                <div style="display: flex; justify-content: center; align-items: center; gap: 22px; padding: 18px 0 14px">
+                  <button class="lg lgb" onClick=${v.passBtn} aria-label="Pass" style="width: 62px; height: 62px; border-radius: 50%; color: #C2362F; display: flex; align-items: center; justify-content: center; padding: 0"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+                  <button class="lg lgb" onClick=${v.starBtn} aria-label="Super-apply" style="width: 52px; height: 52px; border-radius: 50%; color: #2F64D6; display: flex; align-items: center; justify-content: center; padding: 0"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.5 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6-4.9-4.5 6.6-.8z"></path></svg></button>
+                  <button class="lg lgb" onClick=${v.likeBtn} aria-label="Apply" style="width: 62px; height: 62px; border-radius: 50%; color: #1F8A5B; display: flex; align-items: center; justify-content: center; padding: 0"><svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.2 3.1 4.5 6.8 4.5c2.1 0 3.6 1.1 5.2 3 1.6-1.9 3.1-3 5.2-3 3.7 0 5.9 3.7 4.4 7.2C19.5 16.4 12 21 12 21z"></path></svg></button>
+                </div>
+              </div>
+            ` : null}
+
+            
+            ${v.isMatches ? html`
+              <div style="position: relative; flex: 1; min-height: 0; overflow-y: auto; padding: 4px 18px 12px; display: flex; flex-direction: column; gap: 10px">
+                <div style="display: flex; align-items: baseline; justify-content: space-between">
+                  <div style="font: 400 28px 'Instrument Serif', Georgia, serif">Your <em>shortlist</em></div>
+                  <div style="font-size: 13px; color: #45454D">${v.savedLabel}</div>
+                </div>
+                ${v.noSaved ? html`
+                  <div class="lg" style="border-radius: 20px; padding: 28px 18px; text-align: center; color: #45454D; font-size: 15px; line-height: 1.5">Nothing here yet. Swipe right or star a card in ${v.tabName} and it lands here.</div>
+                ` : null}
+                ${(v.savedList || []).map((s, $index) => html`
+                  <div class="lg" style="border-radius: 18px; padding: 12px; display: flex; align-items: center; gap: 12px">
+                    ${s.hasImg ? html`
+                      <img src=${s.img} alt="" style="flex: 0 0 auto; width: 46px; height: 46px; border-radius: 14px; object-fit: cover; object-position: ${s.pos}" />
+                    ` : null}
+                    ${s.noImg ? html`
+                      <span style="flex: 0 0 auto; width: 46px; height: 46px; border-radius: 14px; background: ${s.fg}; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font: 400 22px 'Instrument Serif', Georgia, serif">${s.mono}</span>
+                    ` : null}
+                    <div style="flex: 1; min-width: 0">
+                      <div style="font-weight: 600; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">${s.title}</div>
+                      <div style="font-size: 13px; color: #45454D; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">${s.company} · ${s.status}</div>
+                    </div>
+                    ${s.isStar ? html`
+                      <span style="color: #2F64D6; display: flex"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" role="img" aria-label="Super-applied"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.5 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6-4.9-4.5 6.6-.8z"></path></svg></span>
+                    ` : null}
+                    <button class="lgb" onClick=${s.remove} aria-label="Remove from shortlist" style="flex: 0 0 auto; width: 44px; height: 44px; border: 0; background: transparent; color: #5E5E66; display: flex; align-items: center; justify-content: center; border-radius: 12px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+                  </div>
+                `)}
+              </div>
+            ` : null}
+
+            
+            <div style="position: relative; padding: 6px 14px 18px">
+              <nav aria-label="App" class="lg" style="display: flex; justify-content: space-around; padding: 6px; border-radius: 26px">
+                <button onClick=${v.goDiscover} aria-label="Discover" style="border: 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 7px 22px; border-radius: 20px; background: ${v.discoverBg}; color: ${v.discoverColor}; font: 600 11px Inter, sans-serif; transition: background .25s ease">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="3"></rect><path d="M9 8h6M9 12h6M9 16h3"></path></svg>
+                  Discover
+                </button>
+                <button onClick=${v.goMatches} aria-label="Shortlist" style="border: 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 7px 22px; border-radius: 20px; background: ${v.matchesBg}; color: ${v.matchesColor}; font: 600 11px Inter, sans-serif; position: relative; transition: background .25s ease">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.3-8.9-8.6C1.7 8.2 3.8 5 7 5c2 0 3.4 1 5 2.8C13.6 6 15 5 17 5c3.2 0 5.3 3.2 3.9 6.4C19 15.7 12 20 12 20z"></path></svg>
+                  Shortlist
+                  ${v.hasSaved ? html`
+                    <span style="position: absolute; top: 2px; right: 12px; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box; border-radius: 999px; background: #1F7A55; color: #FFFFFF; font: 700 11px/20px Inter, sans-serif; text-align: center">${v.savedCount}</span>
+                  ` : null}
+                </button>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sw-demo-side" style="flex: 1 1 0; min-width: 0; padding-top: 220px; display: flex; flex-direction: column; gap: 14px">
+        <div class="lg" style="border-radius: 26px; padding: 24px; display: flex; flex-direction: column; gap: 12px">
+          <div style="font: 400 26px 'Instrument Serif', Georgia, serif">Try it <em>right here</em></div>
+          <p style="margin: 0; font-size: 15px; line-height: 1.55; color: #45454D">Drag the card or tap the buttons. Everything you like or star lands in the Shortlist tab.</p>
+          <p style="margin: 0; font-size: 15px; line-height: 1.55; color: #45454D">Switch to <strong style="color: #17171B">Tasks</strong> at the top for quick paid side quests.</p>
+        </div>
+        <p style="margin: 0 4px; font-size: 13px; line-height: 1.5; color: #5E5E66">Sample listings for illustration only, not real job postings.</p>
+      </div>
+    </div>
+  </section>
+
+  
+  <section aria-label="Companies featured in the demo" style="position: relative; padding: 8px 0 80px">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px 28px; display: flex; justify-content: center">
+      <span style="font-size: 12px; font-weight: 500; color: #6B6B72; text-transform: uppercase; letter-spacing: 0.32em; text-align: center">Featured in the demo</span>
+    </div>
+    <div class="sw-marquee">
+      <div class="sw-track">
+        ${(v.logos || []).map((l, $index) => html`
+          <div class="sw-logo" aria-hidden=${l.hidden}>
+            <img src=${l.src} alt=${l.alt} style="height: ${l.h}px; width: auto; display: block" />
+          </div>
+        `)}
+      </div>
+    </div>
+  </section>
+
+  
+  <section id="how" style="position: relative; overflow: hidden">
+    <div class="orb" aria-hidden="true" style="width: 460px; height: 460px; background: #A9C4F5; opacity: .5; top: 120px; left: 8%"></div>
+    <div class="orb" aria-hidden="true" style="width: 420px; height: 420px; background: #9BE7B8; opacity: .5; bottom: 0; right: 10%"></div>
+    <div style="position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 96px 24px; display: flex; flex-direction: column; gap: 48px">
+      <div style="display: flex; flex-direction: column; gap: 14px; max-width: 640px">
+        <span style="font-size: 12px; font-weight: 500; color: #6B6B72; text-transform: uppercase; letter-spacing: 0.32em">How it works</span>
+        <h2 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(44px, 5.6vw, 76px); line-height: 0.98; letter-spacing: -0.02em">Applying shouldn't take longer than <em>deciding.</em></h2>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 20px">
+        <div class="lg" style="flex: 1 1 280px; min-width: 0; border-radius: 28px; padding: 28px; display: flex; flex-direction: column; gap: 14px">
+          <span style="font: italic 400 52px/1 'Instrument Serif', Georgia, serif; color: #8A8A90">01</span>
+          <h3 style="margin: 0; font: 400 28px 'Instrument Serif', Georgia, serif">Build your profile once</h3>
+          <p style="margin: 0; font-size: 16px; line-height: 1.55; color: #45454D">Add your resume, skills and weekly availability. Every right swipe sends it, so you never retype the same form twice.</p>
+        </div>
+        <div class="lg" style="flex: 1 1 280px; min-width: 0; border-radius: 28px; padding: 28px; display: flex; flex-direction: column; gap: 14px">
+          <span style="font: italic 400 52px/1 'Instrument Serif', Georgia, serif; color: #8A8A90">02</span>
+          <h3 style="margin: 0; font: 400 28px 'Instrument Serif', Georgia, serif">Swipe your feed</h3>
+          <p style="margin: 0; font-size: 16px; line-height: 1.55; color: #45454D">Cards are ranked by fit, location and schedule. Pass on what's not for you, apply to what is, and star the ones you really want.</p>
+        </div>
+        <div class="lg" style="flex: 1 1 280px; min-width: 0; border-radius: 28px; padding: 28px; display: flex; flex-direction: column; gap: 14px">
+          <span style="font: italic 400 52px/1 'Instrument Serif', Georgia, serif; color: #8A8A90">03</span>
+          <h3 style="margin: 0; font: 400 28px 'Instrument Serif', Georgia, serif">Match and talk</h3>
+          <p style="margin: 0; font-size: 16px; line-height: 1.55; color: #45454D">When an employer swipes back, it's a match and a chat opens. Super-applies land at the top of their pile.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <section id="modes" style="position: relative; overflow: hidden">
+    <div class="orb" aria-hidden="true" style="width: 480px; height: 480px; background: #F6C9A8; opacity: .55; top: 160px; right: 4%"></div>
+    <div class="orb" aria-hidden="true" style="width: 380px; height: 380px; background: #9BE7B8; opacity: .45; bottom: 40px; left: 22%"></div>
+    <div style="position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 72px 24px 96px; display: flex; flex-direction: column; gap: 48px">
+      <div style="display: flex; flex-direction: column; gap: 14px; max-width: 680px">
+        <span style="font-size: 12px; font-weight: 500; color: #6B6B72; text-transform: uppercase; letter-spacing: 0.32em">Two feeds, one app</span>
+        <h2 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(44px, 5.6vw, 76px); line-height: 0.98; letter-spacing: -0.02em">Looking for a career, or just <em>this weekend's rent?</em></h2>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 16px 48px; padding-top: 16px">
+        <div class="sk-card">
+          <span class="sk-pan sk-g-jobs" aria-hidden="true"></span>
+          <span class="sk-pan sk-blur sk-g-jobs" aria-hidden="true"></span>
+          <span class="sk-blobs" aria-hidden="true"><span class="b1"></span><span class="b2"></span></span>
+          <div class="sk-content">
+            <span style="font-size: 12px; font-weight: 500; color: #5E5E66; text-transform: uppercase; letter-spacing: 0.28em">01 · Careers</span>
+            <h3 style="margin: 0; font: 400 56px/1 'Instrument Serif', Georgia, serif; letter-spacing: -0.02em"><em>Jobs</em></h3>
+            <p style="margin: 0; font-size: 16px; line-height: 1.6; color: #3E3E46">Internships, part-time and full-time roles. Swipe right to send your profile; matched employers invite you to interview straight from the chat.</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px">
+              <span style="padding: 6px 12px; border-radius: 999px; font-size: 13px; border: 1px solid rgba(23,23,27,.14); background: rgba(255,255,255,.5)">Internships</span>
+              <span style="padding: 6px 12px; border-radius: 999px; font-size: 13px; border: 1px solid rgba(23,23,27,.14); background: rgba(255,255,255,.5)">New grad</span>
+              <span style="padding: 6px 12px; border-radius: 999px; font-size: 13px; border: 1px solid rgba(23,23,27,.14); background: rgba(255,255,255,.5)">Part-time</span>
+              <span style="padding: 6px 12px; border-radius: 999px; font-size: 13px; border: 1px solid rgba(23,23,27,.14); background: rgba(255,255,255,.5)">Remote or on-site</span>
+            </div>
+            <a class="lg-ink lgb" href="#demo" onClick=${v.pickJob} style="align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; height: 46px; padding: 0 20px; border-radius: 999px; font-size: 15px; font-weight: 500">Browse jobs
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+            </a>
+          </div>
+        </div>
+        <div class="sk-card">
+          <span class="sk-pan sk-g-tasks" aria-hidden="true"></span>
+          <span class="sk-pan sk-blur sk-g-tasks" aria-hidden="true"></span>
+          <span class="sk-blobs" aria-hidden="true"><span class="b1"></span><span class="b2"></span></span>
+          <div class="sk-content">
+            <span style="font-size: 12px; font-weight: 500; color: #5E5E66; text-transform: uppercase; letter-spacing: 0.28em">02 · Side quests</span>
+            <h3 style="margin: 0; font: 400 56px/1 'Instrument Serif', Georgia, serif; letter-spacing: -0.02em"><em>Tasks</em></h3>
+            <p style="margin: 0; font-size: 16px; line-height: 1.6; color: #3E3E46">Short, paid, one-off work you can finish in hours or days. The price and deadline are on the card; swipe right to claim it and get paid when it's done.</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px">
+              <span style="padding: 6px 12px; border-radius: 999px; font-size: 13px; border: 1px solid rgba(23,23,27,.14); background: rgba(255,255,255,.5)">Design</span>
+              <span style="padding: 6px 12px; border-radius: 999px; font-size: 13px; border: 1px solid rgba(23,23,27,.14); background: rgba(255,255,255,.5)">Tutoring</span>
+              <span style="padding: 6px 12px; border-radius: 999px; font-size: 13px; border: 1px solid rgba(23,23,27,.14); background: rgba(255,255,255,.5)">Event help</span>
+              <span style="padding: 6px 12px; border-radius: 999px; font-size: 13px; border: 1px solid rgba(23,23,27,.14); background: rgba(255,255,255,.5)">Research</span>
+            </div>
+            <a class="lg-ink lgb" href="#demo" onClick=${v.pickTask} style="align-self: flex-start; display: inline-flex; align-items: center; gap: 8px; height: 46px; padding: 0 20px; border-radius: 999px; font-size: 15px; font-weight: 500">Browse tasks
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  <section id="employers" style="position: relative; overflow: hidden">
+    <div class="orb" aria-hidden="true" style="width: 520px; height: 300px; background: #9BE7B8; opacity: .7; top: 20px; left: 18%"></div>
+    <div class="orb" aria-hidden="true" style="width: 360px; height: 260px; background: #A9C4F5; opacity: .55; top: 60px; right: 14%"></div>
+    <div style="position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 24px 96px">
+      <div class="lg" style="border-radius: 32px; padding: 40px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px">
+        <div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+          <h2 style="margin: 0; font: 400 42px/1.05 'Instrument Serif', Georgia, serif; letter-spacing: -0.01em">Hiring? Swipe through people who <em>already said yes.</em></h2>
+          <p style="margin: 0; font-size: 17px; line-height: 1.55; color: #2E3F37">Post a role or a task in minutes. You only see candidates who swiped right on you, and you can chat the moment you match.</p>
+        </div>
+        <a class="lg-ink lgb" href="#demo" style="display: inline-flex; align-items: center; height: 52px; padding: 0 26px; border-radius: 999px; font-weight: 500; font-size: 15px; letter-spacing: 0.01em">Post a listing</a>
+      </div>
+    </div>
+  </section>
+
+  
+  <div style="background: #F2EFE9; padding: 0 clamp(12px, 1.5vw, 24px) 12px">
+  <footer ref=${v.kwfRef} class=${v.kwfClass} >
+    <div class="kwf-in-wrap">
+      <p class="kwf-sr">sidequest</p>
+      <svg class="kwf-word" viewBox=${v.kwViewBox} aria-hidden="true" onPointerMove=${v.kwWordMove} onPointerLeave=${v.kwWordLeave}>
+        ${(v.kwLetters || []).map((l, $index) => html`
+          <g class="kwf-l" style="transition-delay: ${l.delay}"><path ref=${l.ref} d=${l.d} fill="#173D2B" onClick=${l.stamp}></path></g>
+        `)}
+      </svg>
+    </div>
+  </footer>
+  </div>
+</div>`;
+SideQuest.prototype.render = function () { return tpl(this.renderVals()); };
+render(h(SideQuest, {}), document.getElementById('root'));
+</script>
+</body>
+</html>
